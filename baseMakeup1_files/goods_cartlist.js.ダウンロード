@@ -1,0 +1,44 @@
+﻿var ecblib = ecblib || {};
+ecblib.goods_cartlist = ecblib.goods_cartlist || {};
+
+(function () {
+    var _goods_cartlist = ecblib.goods_cartlist;
+
+    var cartlistfunc = function (isSlide) {
+        if (isSlide) {
+            jQuery("#jscart_replace_").css("display", "none");
+        }
+        jQuery("#jscart_replace_").load(ecblib.sys.wwwroot + "/site/js/cart.aspx", function () {
+            var rem_fn = function () {
+                jQuery(".js-jscart-delete-btn").each(function () {
+                    var cart = jQuery(this).attr("data-cart");
+                    jQuery(this).bind("click", function () {
+                        jQuery("#js_jscart_items_" + cart).slideUp("normal", function () {
+                            jQuery(this).remove();
+                            jQuery.ajax({
+                                type: "POST",
+                                url: ecblib.sys.wwwroot + "/site/js/delcart.aspx",
+                                data: {
+                                    "cart": cart,
+                                    "crsirefo_hidden": crsirefo_jscart
+                                },
+                                cache: false,
+                                success: function () {
+                                    cartlistfunc(false);
+                                    ecblib.ui.showCartCount();
+                                }
+                            });
+                        });
+                    });
+                });
+            };
+            if (isSlide) {
+                jQuery("#jscart_replace_").show();
+                rem_fn();
+            } else {
+                rem_fn();
+            }
+        });
+    };
+    cartlistfunc(true);
+}());

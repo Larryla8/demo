@@ -1,0 +1,192 @@
+﻿@charset "UTF-8";
+
+/* ヘッダ（ＰＣ） ファーストビュー用 */
+
+/* sys/base_form.css のコピー ここから */
+
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="search"],
+input[type="password"],
+input[type="url"],
+input[type="number"],
+select,
+textarea {
+  padding: 4px;
+  border: 1px solid #D9DFE3;
+  background-color: #fff;
+}
+
+/* ----ボタン---- */
+
+.btn {
+  display: inline-block;
+  margin: 0;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 4px 10px;
+  border-radius: 3px;
+}
+
+.btn-default {
+  color: #444;
+  border: solid 1px #F2F4F6;
+  background-color: #F2F4F6;
+}
+
+/* ここまで sys/base_form.css のコピー */
+
+
+/* usr/layout.css のコピー ここから */
+
+/* ここまで usr/layout.css のコピー */
+
+
+/* usr/block.css のコピー ここから */
+
+/* ----ヘッダー---- */
+
+.block-header-logo {
+  width: unset;
+  width: 240px;
+  font-size: 0;
+}
+.block-header-logo a{
+  display: flex;
+  align-items: center;
+}
+.block-header-logo--text{
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  font-weight: bold;
+  color: #898989;
+  margin-left: 19px;
+  white-space: nowrap;
+}
+
+.block-headernav {
+  width: 240px;
+  margin-left: auto;
+}
+
+.block-headernav--item-list {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.block-headernav--item-list li {
+  position: relative;
+  display: inline-block;
+  font-size: 11px;;
+  text-align: center;
+}
+
+.block-headernav--item-list li i.fa {
+  position: relative;
+  display: block;
+  font-size: 28px;
+  margin-bottom: 10px;
+  z-index: 1;
+}
+
+.block-headernav--item-list li a {
+  display: block;
+  font-size: 12px;
+}
+
+.block-headernav--item-list li a:hover {
+  text-decoration: none;
+}
+
+.block-headernav--cart-count {
+  display: none;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 11px;
+  background-color: #5286C6;
+  color: #fff;
+  border-radius: 10px;
+  top: -5px;
+  right: -2px;
+  z-index: 2;
+}
+
+/* ----ヘッダー検索---- */
+
+.block-global-search {
+  width: 520px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.block-global-search--keyword {
+  width: 280px;
+}
+
+.block-global-search form {
+  background-color: #fff;
+  border: 1px solid #D9DFE3;
+  border-radius: 4px;
+  padding: 7px 9px 6px 0;
+}
+
+input.block-global-search--keyword:hover,
+input.block-global-search--keyword {
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+
+button.block-global-search--submit {
+  border: none;
+  background-color: transparent;
+  width: 33px;
+}
+
+.block-global-search--searchdetail {
+  margin-left: 15px;
+}
+
+.block-global-search--search-detail-link {
+  color: #444444;
+  text-decoration: underline;
+}
+
+.block-global-search--search-detail-link:hover {
+  text-decoration: none;
+}
+
+/* ここまで usr/block.css のコピー */
+
+
+/* usr/user.css のコピー ここから */
+
+/* fade image in after load */
+.lazyload {
+  opacity: 0;
+}
+.lazyloading {
+  opacity: 1;
+}
+.lazyloaded {
+  opacity: 1;
+  transition: opacity 200ms;
+}
+
+/* ここまで usr/user.css のコピー */

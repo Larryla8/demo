@@ -1,0 +1,147 @@
+﻿var ecblib = ecblib || {};
+ecblib.goods_ajax_cart = ecblib.goods_ajax_cart || {};
+
+jQuery(function () {
+    var _goods_ajax_cart = ecblib.goods_ajax_cart;
+
+    var s_width = 60;
+    var l_width = 200;
+    if (document.URL.match("cart.aspx")) {
+        return false;
+    }
+    var $btn_cart = jQuery(".js-animation-add-cart");
+    $btn_cart.off("click");
+    $btn_cart.on("click", function (e) {
+        var loadStart = function (elem) {
+            jQuery(elem).addClass("js-animation-add-cart-in-progress");
+            jQuery(elem).html(ecblib.ui.loadingImageMin() + '<span class="sr-only">' + ecblib.msg.goods_ajax_cart.PLEASE_WAIT + '</span>');
+            return elem;
+        };
+        var loadEnd = function (elem, iserror) {
+            if (!iserror) {
+                ecblib.ui.showToolTip(jQuery(elem), { tooltip: ecblib.msg.goods_ajax_cart.TO_SHOPPING_CART, diptimeSec: 1 });
+                ecblib.ui.showCartCount();
+                setTimeout(function () {
+                    jQuery(elem).removeClass("js-animation-add-cart-in-progress");
+                    jQuery(elem).html(ecblib.msg.goods_ajax_cart.PUT_IN_SHOPPING_CART);
+                }, 1400);
+            } else {
+                jQuery(elem).removeClass("js-animation-add-cart-in-progress");
+                jQuery(elem).html(ecblib.msg.goods_ajax_cart.PUT_IN_SHOPPING_CART);
+            }
+        };
+        var addCart = function (b, g) {
+            var o = loadStart(b);
+            jQuery.ajax({
+                async: true,
+                type: "POST",
+                url: ecblib.sys.wwwroot + "/site/js/addcart.aspx",
+                data: {
+                    "goods": goods,
+                    "crsirefo_hidden": crsirefo_jscart
+                },
+                cache: false,
+                ifModified: false,
+                dataType: "json",
+                success: function (result) {
+                    result = result || {};
+                    if ('ecblib' in window && 'abtest' in ecblib && 'loadABtest' in ecblib.abtest) {
+                        ecblib.abtest.saveBlockClickLog("jscart");
+                    }
+                    if (result.IsUseGtmGa === 'true') {
+                        window.dataLayer = window.dataLayer || [];
+                        dataLayer.push({
+                            'etm_ga_virtualurl_addcart': result.AjaxVirtualUrl_AddCart,
+                            'event': 'etm_ga_cart_added'
+                        });
+                    } else if (result.IsUseLegacyGa === 'true') {
+                        if (typeof gtag == "function") {
+                            var gatrackingcode = jQuery("meta[property='ecb:GATrackingCode']").attr('content');
+                            gtag('config', gatrackingcode, { 'page_title': 'AddCart', 'page_location': ecblib.sys.wwwroot + '/site/cart/addcart.aspx?goods=' + goods });
+                        }
+                    }
+                    if (result.ErrMessage && result.ErrMessage.length > 0) {
+                        alert(result.ErrMessage.join("\r\n").replace(/<\/?[^>]+>/gi, ""));
+                        loadEnd(o, true);
+                        return false;
+                    }
+                    if (jQuery("#jscart_replace_").length > 0) {
+                        var self = function (isDelete) {
+                            jQuery("#jscart_replace_").load(ecblib.sys.wwwroot + "/site/js/cart.aspx", function () {
+                                jQuery(".js-jscart-delete-btn").each(function () {
+                                    var cart = jQuery(this).attr("data-cart");
+                                    jQuery(this).bind("click", function () {
+                                        jQuery("#js_jscart_items_" + cart).slideUp("normal", function () {
+                                            jQuery(this).remove();
+                                            jQuery.ajax({
+                                                type: "POST",
+                                                url: ecblib.sys.wwwroot + "/site/js/delcart.aspx",
+                                                data: {
+                                                    "cart": cart,
+                                                    "crsirefo_hidden": crsirefo_jscart
+                                                },
+                                                cache: false,
+                                                success: function () {
+                                                    self(true);
+                                                    ecblib.ui.showCartCount();
+                                                }
+                                            });
+                                        });
+                                    });
+                                });
+                                if (!isDelete) {
+                                    setTimeout(function () {
+                                        loadEnd(o, false);
+                                    }, 400);
+                                }
+                            });
+                        };
+                        self(false);
+                    } else {
+                        setTimeout(function () {
+                            loadEnd(o, false);
+                        }, 400);
+                    }
+                },
+                error: function (xhr, status, thrown) {
+                    loadEnd(o, true);
+                    alert(ecblib.msg.goods_ajax_cart.SESSION_EXPIRED);
+                    return false;
+                }
+            });
+            return true;
+        };
+        if (jQuery(this).hasClass("js-animation-add-cart-in-progress")) {
+            return false;
+        }
+        var href = jQuery(this).attr("href");
+        var re = new RegExp("goods=([0-9A-Za-z_\-]+)");
+        var matches = href.match(re);
+        var goods = "";
+        if (matches && matches.length == 2) {
+            goods = matches[1];
+        } else {
+            return true;
+        }
+        if (jQuery("#agree_" + goods).length > 0) {
+            var btn = this;
+            ecblib.ui.dialog('agree_' + goods, {
+                width: '400px',
+                buttons: {
+                    'btnAgree': function (action) {
+                        addCart(btn, goods);
+                        action.close();
+                    }
+                    , 'btnNotAgree': function (action) {
+                        action.close();
+                    }
+                }
+            });
+
+        } else {
+            addCart(this, goods);
+            return false;
+        }
+        return false;
+    });
+});

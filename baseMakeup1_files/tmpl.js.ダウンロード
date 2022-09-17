@@ -1,0 +1,55 @@
+﻿var ecblib = ecblib || {};
+ecblib.tmpl = ecblib.tmpl || {};
+
+(function () {
+    'use strict';
+
+    var _tmpl = ecblib.tmpl;
+
+    _tmpl.goods_history = {};
+    _tmpl.goods_history.LEAVE_HISTORY = ''
+        + '<a href="javascript:void(0);" class="js-item-history-link">${Text}</a>'
+        + '';
+    _tmpl.goods_history.NOT_LEAVE_HISTORY = ''
+        + '<a href="javascript:void(0);" class="js-item-history-link">${Text}</a>'
+        + '';
+
+
+    _tmpl.ui = {};
+    _tmpl.ui.ALERT = ''
+        + '<div class="modal-alert js-modal-alert js-active">'
+        + '  <div class="modal-wrapper">'
+        + '    <div class="modal-content">'
+        + '      <div class="modal-header">'
+        + '        <span class="js-modal-title modal-title">${Title}</span>'
+        + '        <span class="js-modal-close modal-close">×</span>'
+        + '      </div>'
+        + '      <div class="modal-body">'
+        + '        <p class="modal-body-wrapper js-modal-body-wrapper"></p>'
+        + '      </div>'
+        + '      <div class="modal-footer">'
+        + '        <input type="button" class="btn btn-primary" value="OK">'
+        + '      </div>'
+        + '    </div>'
+        + '  </div>'
+        + '</div>'
+        + '';
+    _tmpl.ui.MODAL_DIALOG = ''
+        + '<div class="modal-dialog js-modal-dialog js-active">'
+        + '  <div class="modal-wrapper">'
+        + '    <div class="modal-content js-modal-content">'
+        + '      <div class="modal-header">'
+        + '        <span class="js-modal-title modal-title"></span >'
+        + '        <span class="js-modal-close modal-close">×</span>'
+        + '      </div > '
+        + '    </div>'
+        + '  </div>'
+        + '</div>'
+        + '';
+    _tmpl.ui.WARNING = ''
+        + '<div class="header-warning">'
+        + '  <div class="header-warning-contents js-header-warning-contents">#{Contents}</div>'
+        + '  <div class="header-warning-close js-header-warning-close">×</div>'
+        + '</div>'
+        + '';
+}());

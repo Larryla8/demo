@@ -1,0 +1,26 @@
+﻿var ecblib = ecblib || {};
+ecblib.sys = ecblib.sys || {};
+
+(function() {
+    var _sys = ecblib.sys;
+
+    _sys.formatToSechstantTime = function formatToSechstantTime(epochTime) {
+        var d = new Date(epochTime);
+        var yyyy = d.getFullYear();
+        var MM = padTwoZero(d.getMonth() + 1);
+        var dd = padTwoZero(d.getDate());
+        var hh = padTwoZero(d.getHours());
+        var mm = padTwoZero(d.getMinutes());
+        var ss = padTwoZero(d.getSeconds());
+
+        var result = yyyy + '/' + MM + '/' + dd + ' ' + hh + ':' + mm + ':' + ss;
+        return result;
+    };
+
+    function padTwoZero(src) {
+        var raw = '00' + src;
+        var result = raw.slice(-2);
+        return result;
+    }
+    _sys.padTwoZero = padTwoZero;
+})();
