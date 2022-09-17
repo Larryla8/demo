@@ -1,0 +1,407 @@
+﻿@charset "UTF-8";
+
+/* ----入力フォーム共通---- */
+
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="search"],
+input[type="password"],
+input[type="url"],
+input[type="number"],
+select,
+textarea {
+  padding: 4px;
+  border: 1px solid #D9DFE3;
+  background-color: #fff;
+}
+
+input[type="text"]:hover,
+input[type="tel"]:hover,
+input[type="email"]:hover,
+input[type="search"]:hover,
+input[type="password"]:hover,
+input[type="url"]:hover,
+input[type="number"]:hover,
+select:hover,
+textarea:hover {
+  border: 1px solid #666;
+}
+
+input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+label.radio,
+label.checkbox,
+input[type="radio"],
+input[type="radio"] + label,
+input[type="checkbox"],
+input[type="checkbox"] + label,
+select {
+  cursor: pointer;
+}
+
+input[type="text"][disabled] {
+  background: #dcdcdc;
+  cursor: not-allowed;
+}
+
+/* ----ボタン---- */
+
+.btn {
+  display: inline-block;
+  margin: 0;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 4px 10px;
+  border-radius: 3px;
+}
+
+.btn:hover,
+.btn:focus {
+  text-decoration: none;
+}
+
+.btn:active,
+.btn.active {
+  outline: 0;
+  box-shadow: inset 2px 2px 2px rgba(0, 0, 0, 0.125);
+}
+
+.btn.disabled,
+.btn[disabled],
+.btn.disabled:hover,
+.btn[disabled]:hover,
+.btn.disabled:active,
+.btn[disabled]:active {
+  cursor: not-allowed;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  box-shadow: none !important;
+}
+
+.btn-default {
+  color: #444;
+  border: solid 1px #F2F4F6;
+  background-color: #F2F4F6;
+}
+
+.btn-primary {
+  color: #fff;
+  border: solid 1px #5286C6;
+  background-color: #5286C6;
+}
+
+.btn-secondary {
+  color: #fff;
+  border: solid 1px #333;
+  background-color: #666;
+}
+
+.btn-danger {
+  color: #fff;
+  border: solid 1px #c30;
+  background-color: #d9534f;
+}
+
+.hidden-btn {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+}
+
+/* ----画面上部メッセージ---- */
+
+.alert {
+  margin-top: 5px;
+  padding: 10px 10px 10px 30px;
+  margin-bottom: 5px;
+  position: relative;
+  border: 1px solid #ebccd1;
+  color: #a94442;
+  background-color: #f2dede;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  background-size: 12px auto;
+  background-position: 10px 50%;
+  background-image: url(../../img/sys/icon/alert.png);
+}
+
+.success {
+  margin-top: 5px;
+  padding: 10px 10px 10px 30px;
+  margin-bottom: 5px;
+  position: relative;
+  border: 1px solid #bce8f1;
+  color: #31708f;
+  background-color: #d9edf7;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  background-size: 12px auto;
+  background-position: 10px 50%;
+  background-image: url(../../img/sys/icon/success.png);
+}
+
+/* ----入力フォームタイトル---- */
+
+.legend {
+  margin: 40px 0 20px;
+  padding: 0 0 5px 2px;
+  font-size: 26px;
+  font-weight: normal;
+  border-bottom: #999 1px solid;
+}
+
+/* ----縦型入力フォーム---- */
+
+.fieldset-vertical {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.fieldset-vertical .form-group {
+  margin: 5px 0 10px 0;
+}
+
+.fieldset-vertical .form-label,
+.fieldset-vertical .constraint {
+  margin: 0 0 5px 0;
+}
+
+.fieldset-vertical .form-label {
+  padding: 10px;
+  margin-right: 10px;
+  text-align: left;
+  background: #f9f9f9;
+  vertical-align: middle;
+}
+
+.fieldset-vertical .form-label label {
+  font-weight: bold;
+}
+
+.fieldset-vertical .form-control {
+  clear: both;
+}
+
+/* ----横型入力フォーム---- */
+
+.fieldset {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.fieldset .form-group {
+  display: table;
+  width: 100%;
+  border-top: #D9DFE3 1px solid;
+}
+.fieldset .form-group:last-of-type{
+  border-bottom: #D9DFE3 1px solid;
+}
+.form-group.block-shipping-address-confirmation--dept {
+  border-bottom: #D9DFE3 1px solid;
+}
+.form-group.block-withdrawal--pwd {
+  border-bottom: 1px solid #D9DFE3;
+}
+
+
+.fieldset .form-group:last-child {
+  border-bottom: #D9DFE3 1px solid;
+}
+
+.form-group.block-shipping-address--dept {
+  border-bottom: #D9DFE3 1px solid;
+}
+
+.fieldset .form-label,
+.fieldset .constraint,
+.fieldset .form-control {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.fieldset .form-label {
+  width: 24%;
+  padding: 25px 0px 25px 25px;
+  /* text-align: center; */
+  background: #F2F4F6;
+  font-size: 16px;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.fieldset .form-label label {
+  font-weight: bold;
+}
+
+.fieldset .constraint {
+  width: 65px;
+  padding: 5px;
+  background: #F2F4F6;
+}
+
+.fieldset .form-control {
+  padding: 5px 0 5px 20px;
+}
+
+.form-group.block-login--uid .form-control,
+.form-group.block-login--pwd .form-control{
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+
+/* ----入力支援---- */
+
+.form-error {
+  display: block;
+  color: #a94442;
+}
+
+.required:after {
+  display: inline-block;
+  padding: .2em .6em;
+  font-size: 11px;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25em;
+  color: #fff;
+  background-color: #d9534f;
+  content: "必須";
+}
+
+.help-block {
+  display: block;
+  font-size: 14px;
+  margin-top: 5px;
+  color: #444444;
+}
+
+.help-block a{
+  text-decoration: underline;
+}
+.help-block a:hover{
+  text-decoration: none;
+}
+
+.count-msg-another {
+  display: block;
+  font-size: 11px;
+  margin-top: 5px;
+  color: #555;
+}
+
+.count-msg {
+  display: block;
+  font-size: 11px;
+  margin-top: 5px;
+  color: #f66;
+}
+
+/* ----入力フォームボタン---- */
+
+.action-buttons {
+  margin-top: 10px;
+  width: 100%;
+  text-align: center;
+  display: block;
+}
+
+.action {
+  display: inline;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.action .btn {
+  margin-top: 10px;
+  padding: 8px 8px;
+  font-size: 16px;
+  min-width: 160px;
+  border-radius: 3px;
+  font-weight: bold;
+  border: none;
+}
+.btn-default.block-inquiry--forward {
+  color: #fff;
+  border: solid 1px #5286C6;
+  background-color: #5286C6;
+}
+
+/* ----ラジオボタン、チェックボックス---- */
+
+.radio {
+  margin-right: 10px;
+}
+
+.checkbox {
+  margin-right: 10px;
+}
+
+/* ----EFO---- */
+.efo-icon {
+  border: none;
+  vertical-align: middle;
+}
+
+input[type="text"].efo-error,
+input[type="tel"].efo-error,
+input[type="email"].efo-error,
+input[type="search"].efo-error,
+input[type="password"].efo-error,
+input[type="url"].efo-error,
+input[type="number"].efo-error,
+select.efo-error,
+textarea.efo-error {
+  background-color: #f2dede;
+}
+
+input[type="text"].efo-valid,
+input[type="tel"].efo-valid,
+input[type="email"].efo-valid,
+input[type="search"].efo-valid,
+input[type="password"].efo-valid,
+input[type="url"].efo-valid,
+input[type="number"].efo-valid,
+select.efo-valid,
+textarea.efo-valid {
+  background-color: #e9f2d7;
+}
+
+input[name="addr2"].efo-caution {
+  background-color: #fbf5c0;
+}
+
+input[name="s_addr2"].efo-caution {
+  background-color: #fbf5c0;
+}
+
+input[name="d_addr2"].efo-caution {
+  background-color: #fbf5c0;
+}
