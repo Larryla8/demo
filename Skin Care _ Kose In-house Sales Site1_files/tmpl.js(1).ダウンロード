@@ -1,0 +1,9 @@
+﻿var ecblib = ecblib || {};
+ecblib.tmpl = ecblib.tmpl || {};
+
+(function () {
+    'use strict';
+
+    var _tmpl = ecblib.tmpl;
+
+}());

@@ -1,0 +1,101 @@
+﻿var ecblib = ecblib || {};
+ecblib.goods_history = ecblib.goods_history || {};
+
+(function () {
+    var _goods_history = ecblib.goods_history;
+
+    var leaveHistory = jQuery('#js_leave_History').val();
+    _goods_history.leaveHistory = leaveHistory;
+    jQuery(function () {
+        ChangeButton(leaveHistory);
+        CautionChange(leaveHistory);
+    });
+
+    function ChangeButton(leaveHistory) {
+        var buttondiv = jQuery("#itemHistoryButton");
+        var buttonspan;
+        if (leaveHistory == 1) {
+            buttondiv.find("a").remove();
+            var leaveHistoryTmpl = ecblib.tmpl.goods_history.LEAVE_HISTORY;
+            var leaveHistoryMsg = ecblib.msg.goods_history.LEAVE_HISTORY;
+            var leaveHistoryHtml = ecblib.sys.render(leaveHistoryTmpl, { Text: leaveHistoryMsg });
+            buttonspan = jQuery(leaveHistoryHtml);
+            buttonspan.bind("click", DisplayCookie);
+        } else {
+            buttondiv.find("a").remove();
+            var notLeaveHistoryTmpl = ecblib.tmpl.goods_history.NOT_LEAVE_HISTORY;
+            var notLeaveHistoryMsg = ecblib.msg.goods_history.NOT_LEAVE_HISTORY;
+            var notLeaveHistoryHtml = ecblib.sys.render(notLeaveHistoryTmpl, { Text: notLeaveHistoryMsg });
+            buttonspan = jQuery(notLeaveHistoryHtml);
+            buttonspan.bind("click", DestroyCookie);
+        }
+        buttondiv.html(buttonspan.css({
+            cursor: "pointer"
+        }));
+    }
+
+    function CautionChange(leaveHistory) {
+        var itemHistory = "";
+        jQuery("#historyCaution").css({
+            display: "block"
+        });
+        jQuery.ajax({
+            async: false,
+            type: "POST",
+            url: ecblib.sys.wwwroot + "/site/goods/ajaxitemhistory.aspx",
+            cache: false,
+            dataType: "text",
+            success: function (data) {
+                itemHistory = data.replace("\r\n", "");
+                if (leaveHistory == 0) {
+                    jQuery("#messRedraw").css({
+                        display: "none"
+                    });
+                    jQuery("#messNothing").css({
+                        display: "block"
+                    });
+                    if (itemHistory == "True") {
+                        jQuery("#historyCaution").css({
+                            display: "none"
+                        });
+                    }
+                } else {
+                    jQuery("#messRedraw").css({
+                        display: "block"
+                    });
+                    jQuery("#messNothing").css({
+                        display: "none"
+                    });
+                }
+            }
+        });
+    }
+
+    function DisplayCookie(event) {
+        jQuery.ajax({
+            type: "POST",
+            url: ecblib.sys.wwwroot + "/site/goods/ajaxhistorycookie.aspx",
+            cache: false
+        });
+        jQuery("#itemHistory").slideToggle("fast", function () {
+            CautionChange(0);
+            ChangeButton(0);
+            jQuery("#itemHistory").slideToggle("fast");
+        });
+    }
+
+    function DestroyCookie(event) {
+        var historydiv = jQuery("#itemHistoryDetail");
+        jQuery.ajax({
+            type: "POST",
+            url: ecblib.sys.wwwroot + "/site/goods/ajaxhistorycookie.aspx",
+            cache: false
+        });
+        jQuery("#itemHistory").slideToggle("fast", function () {
+            historydiv.html("");
+            CautionChange(1);
+            ChangeButton(1);
+            jQuery("#itemHistory").slideToggle("fast");
+        });
+    }
+}());
