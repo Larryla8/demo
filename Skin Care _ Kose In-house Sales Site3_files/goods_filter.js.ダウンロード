@@ -1,0 +1,169 @@
+﻿var ecblib = ecblib || {};
+ecblib.goods_filter = ecblib.goods_filter || {};
+
+(function () {
+    var _goods_filter = ecblib.goods_filter;
+
+    jQuery(document).ready(function(){
+        displayFilterBox();
+        getFilterBoxConditionStatus();
+        submitFilterCheckBox();
+        displayFilterImage();
+        submitFilterSelectBox();
+        displayFilterTree();
+
+    });
+
+    // 絞り込み項目の上下開閉
+    function displayFilterBox(){
+        var sPanel = jQuery('#block_of_filter');
+        var Box = sPanel.children("form").children(".js-filter-box");
+        var trigger = jQuery('.js-filter-box-inner-label', Box);
+        trigger.click(function(){
+            var parentBox = jQuery(this).parents(".js-filter-box:first");
+            if( parentBox.hasClass("block-filter--close") ){
+                // 開動作
+                parentBox.removeClass("block-filter--close");
+                saveFilterBoxConditionStatus(jQuery(this).parents(".js-filter-box").attr("id"),"open");
+            } else {
+                // 閉動作
+                parentBox.addClass("block-filter--close");
+                saveFilterBoxConditionStatus(jQuery(this).parents(".js-filter-box").attr("id"),"");
+            }
+        });
+    }
+
+    // チェックボックスにサブミットを紐付ける
+    function submitFilterCheckBox(){
+        jQuery('[name^=filtercode]').each( function() {
+            jQuery(this).bind('click', function() {
+                submitFilter();
+            });
+        });
+    }
+
+    // 画像用サブミット処理
+    _goods_filter.submitFilterImage = function submitFilterImage(filter_element, check, name, value) {
+        
+        var element = "";
+        
+        // 連続クリック防止
+        jQuery(filter_element).removeAttr("onclick");
+        
+        if (check == "true") {
+            // 要素を追加
+            element = document.createElement('input');
+            element.setAttribute('type', 'hidden');
+            element.setAttribute('name', name);
+            element.setAttribute('value', value);
+            document.frmFilterList.appendChild(element);
+        }
+        else {
+            // 要素を削除
+            jQuery(filter_element).children("input[name=" + name + "]").remove();
+        }
+        
+        submitFilter();
+    };
+
+    // セレクトボックス用サブミット処理
+    function submitFilterSelectBox(){
+        jQuery('[name^=brand]').each( function() {
+            jQuery(this).bind('change', function() {
+                submitFilter();
+            });
+        });
+    }
+
+    // ツリー用サブミット処理
+    _goods_filter.submitFilterTree = function submitFilterTree(filter_element, name, value) {
+        
+        // 連続クリック防止
+        jQuery(filter_element).removeAttr("onclick");
+        
+        jQuery('.js-filter-treelist-filterstyle').children('input[name=' + name + ']').remove();
+        
+        if (value != ''){
+            var element = "";
+            // 要素を追加
+            element = document.createElement('input');
+            element.setAttribute('type', 'hidden');
+            element.setAttribute('name', name);
+            element.setAttribute('value', value);
+            document.frmFilterList.appendChild(element);
+        }
+        submitFilter();
+    };
+
+    // ツリーの展開
+    function displayFilterTree(){
+        jQuery(function() {
+            jQuery('.js-filter-treeitem-dir').click(function() {
+                var _thisMenu = jQuery(this);
+                _thisMenu.parents(".js-filter-tree-item:first").find(".js-filter-tree:first").slideToggle('fast');
+            jQuery(this).toggleClass("block-filter--treeitem-dir__close");
+            return false;
+            });
+        });
+    }
+
+    // サブミット処理
+    function submitFilter()
+    {
+        if (jQuery('[name=brand]').val() == ''){
+            jQuery('[name=brand]').children('option').remove();
+        }
+        // 500ミリ秒以内にチェックされた絞り込み項目を検索対象とする
+        setTimeout( function() {
+            jQuery('#frmFilterList').submit();
+        }, 500);
+    }
+
+    // 絞り込み項目の上下開閉状態をクッキーに保存
+    function saveFilterBoxConditionStatus(key, value) {
+        Cookies.set(key, value, { expires: 365, path: '/', secure: true });
+    }
+
+    // 絞り込み項目の上下開閉状態をクッキーから取得
+    function getFilterBoxConditionStatus() {
+        for (var i=1 ; i<=17 ; i++){
+            if (Cookies.get("div_filter" + String(i)) == "open"){
+                jQuery('#div_filter' + String(i)).removeClass("block-filter--close");
+            } else {
+                jQuery('#div_filter' + String(i)).addClass("block-filter--close");
+            }
+        }
+    }
+
+    // 絞り込み要素(画像)のクリック、ホバー処理
+    function displayFilterImage(){
+        jQuery(document).ready(function() {
+            jQuery('[class^=js-filter-image]').each(function() {
+                
+                var filterElementCheck = jQuery(this).find(".js-filter-element-check");
+                
+                jQuery(this).click(function() {
+                
+                    jQuery(this).removeClass("js-filter-hover-flg");
+                
+                    if (jQuery(this).hasClass("js-filter-check-flg")) {
+                        filterElementCheck.removeClass("block-filter--image-checkoff");
+                    }
+                    else {
+                        filterElementCheck.addClass("block-filter--image-checkoff");
+                    }
+                });
+                
+                if (jQuery(this).hasClass("js-filter-check-flg")) {
+                    jQuery(this).hover(function() {
+                        filterElementCheck.removeClass("block-filter--image-checkoff");
+                    },function() {
+                        if (jQuery(this).hasClass("js-filter-hover-flg")) {
+                            filterElementCheck.addClass("block-filter--image-checkoff");
+                        }
+                    });
+                }
+            });
+        });
+    }
+}());
