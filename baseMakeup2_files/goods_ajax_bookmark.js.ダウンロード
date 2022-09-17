@@ -1,0 +1,197 @@
+﻿var ecblib = ecblib || {};
+ecblib.goods_ajax_bookmark = ecblib.goods_ajax_bookmark || {};
+
+jQuery(document).ready(function() {
+    jQuery(function () {
+        var _goods_ajax_bookmark = ecblib.goods_ajax_bookmark;
+        jQuery(document).on("click", ".js-cancel-modal", function() {
+            var id = jQuery(this).attr("data-target-modal");
+            var attrUrl = ecblib.sys.wwwroot + "/site/customer/bookmark.aspx?goods=" + jQuery(this).attr("data-goods") + "&crsirefo_hidden=" + jQuery('#js_crsirefo_hidden').val();
+            jQuery('[class*="favorite-cancel--btn"]').attr("href", attrUrl);
+            if (jQuery(this).attr("class").indexOf("variation") == -1) {
+                var attrArea = jQuery(this).closest('[class^="pane-goods"]').attr("class").indexOf("footer") != -1 ? ".pane-goods-footer" : ".pane-goods-right-side";
+                jQuery('[class*="favorite-cancel--btn"]').attr("data-area", attrArea);
+            } else {
+                jQuery("#bookmarkmodal_goods_name").text(jQuery(this).attr("data-goods-name"));
+            }
+            ecblib.ui.dialog(id, {
+                quit : function(action) {
+                    action.close();
+                },
+                buttons : {
+                    'btncancel' : function(action) {
+                        action.close();
+                    }
+                }
+            });
+        });
+    });
+
+    var $btn_bookmark = jQuery(".js-animation-bookmark");
+    $btn_bookmark.off("click");
+    jQuery(document).on("click", ".js-animation-bookmark", function(e) {
+        var isRegisted = jQuery(this).attr("class").indexOf("cancel") != -1 ? true : false;
+        var originalText;
+        var goodsKind = "";
+        var attachTarget = "";
+        var attachElement = "";
+        var goodsCode = "";
+        var removeFlg = false;
+        var attachUrl = "javascript:void(0)";
+        var loadStart = function(elem) {
+            goodsCode = jQuery(elem).attr("href").substring(jQuery(elem).attr("href").indexOf("goods="), jQuery(elem).attr("href").indexOf("&crsirefo")).replace("goods=", "");
+            goodsKind = jQuery(elem).attr("class").indexOf("variation") != -1 ? "variation" : "goods";
+            if (jQuery(elem).attr("class").indexOf("cancel") != -1) {
+                if (goodsKind != "variation") {
+                    elem = jQuery(jQuery(elem).attr("data-area")).find('[class*="registed"]');
+                } else {
+                    elem = jQuery("[data-goods="+goodsCode+"]");
+                }
+                removeFlg = true;
+                attachUrl = ecblib.sys.wwwroot + "/site/customer/bookmark.aspx?goods=" + goodsCode + "&crsirefo_hidden=" + jQuery('#js_crsirefo_hidden').val();
+            }
+            jQuery(elem).attr("data-bookmark-click","true");
+            originalText = jQuery(elem).html();
+            attachTarget = jQuery(elem).closest('[class^="pane-goods"]').attr("class").indexOf("footer") != -1 ? ".pane-goods-right-side" : ".pane-goods-footer";
+            attachElement = removeFlg ? jQuery(attachTarget).find(".block-goods-favorite-registed--btn") : jQuery(attachTarget).find(".block-goods-favorite--btn");
+            jQuery(elem).html(ecblib.ui.loadingImageMin() + '<span class="sr-only">お待ちください...</span></a>');
+            return elem;
+        };
+        var loadEnd = function(elem, iserror, msg, btntxt) {
+            if (!iserror) {
+                ecblib.ui.showToolTip(jQuery(".js-animation-bookmark-in-progress"), { tooltip : msg, diptimeSec : 2 });
+                setTimeout(function() {
+                        if (!jQuery(elem).hasClass("invalid-guest-bookmark")) {
+                            jQuery(elem).attr("href", attachUrl);
+                            if (!removeFlg) {
+                                jQuery(elem).removeClass("js-animation-bookmark block-"+goodsKind+"-favorite--btn");
+                                jQuery(elem).addClass("block-"+goodsKind+"-favorite-registed--btn js-cancel-modal");
+                                jQuery(elem).attr("data-goods", goodsCode);
+                                jQuery(elem).attr("data-target-modal", "cancel-modal");
+                                if (goodsKind != "variation") {
+                                    jQuery(elem).html(btntxt);
+                                    attachElement.attr("href", attachUrl);
+                                    attachElement.html(btntxt);
+                                    attachElement.removeClass("js-animation-bookmark block-goods-favorite--btn");
+                                    attachElement.addClass("block-goods-favorite-registed--btn js-cancel-modal");
+                                    attachElement.attr("data-goods", goodsCode);
+                                    attachElement.attr("data-target-modal", "cancel-modal");
+                                } else {
+                                    originalText = originalText.replace('block-icon-image--heart-pink', 'block-icon-image--heart');
+                                    jQuery(elem).html(originalText);
+                                }
+                            } else {
+                                jQuery(elem).addClass("js-animation-bookmark block-"+goodsKind+"-favorite--btn");
+                                jQuery(elem).removeClass("block-"+goodsKind+"-favorite-registed--btn js-cancel-modal");
+                                jQuery(elem).removeAttr("data-goods data-target-modal");
+                                if (goodsKind != "variation") {
+                                    jQuery(elem).html(btntxt);
+                                    attachElement.attr("href", attachUrl);
+                                    attachElement.html(btntxt);
+                                    attachElement.addClass("js-animation-bookmark block-goods-favorite--btn");
+                                    attachElement.removeClass("block-goods-favorite-registed--btn js-cancel-modal");
+                                    attachElement.removeAttr("data-goods data-target-modal");
+                                } else {
+                                    originalText = originalText.replace('block-icon-image--heart-pink', 'block-icon-image--heart');
+                                    jQuery(elem).html(originalText);
+                                }
+                            }
+                        } else {
+                            jQuery(elem).html(originalText);
+                        }
+                    }, 2400);
+            } else {
+                jQuery(elem).html(originalText);
+            }
+            
+            jQuery(elem).removeAttr("data-bookmark-click");
+        };
+        var addBookmark = function(b, g) {
+            // お気に入りボタンのAjax処理が完了していなければ処理を終了する
+            if (jQuery(b).attr("data-bookmark-click") == "true") {
+                return false;
+            }
+            
+            var o = loadStart(b);
+            jQuery.ajax({
+                async: true,
+                type: "POST",
+                url: ecblib.sys.wwwroot + "/site/customer/bookmarkajax.aspx",
+                data: {
+                    "goods": g,
+                    "crsirefo_hidden": jQuery('#js_crsirefo_hidden').val()
+                },
+                cache: false,
+                ifModified: false,
+                dataType: "json",
+                success: function(contents) {
+                    setTimeout(function() {
+                        loadEnd(o, false, contents.msg, contents.btntxt);
+                    }, 400);
+                    if (contents.isGuestBookmarkRedirect) {
+                        location.href = ecblib.sys.wwwroot + "/site/customer/bookmark_guest.aspx";
+                    }
+                    if (contents.isBookmarkRedirect) {
+                        location.href = ecblib.sys.wwwroot + "/site/customer/bookmark.aspx";
+                    }
+                },
+                error: function(xhr, status, thrown) {
+                    loadEnd(o, true);
+                    alert(ecblib.msg.goods_ajax_bookmark.SESSION_EXPIRED);
+                    return false;
+                }
+            });
+            return true;
+        };
+        var removeBookmark = function(b, g) {
+            // お気に入りボタンのAjax処理が完了していなければ処理を終了する
+            if (jQuery(b).attr("data-bookmark-click") == "true") {
+                return false;
+            }
+            
+            var o = loadStart(b);
+            jQuery.ajax({
+                async: true,
+                type: "POST",
+                url: ecblib.sys.wwwroot + "/site/customer/bookmarkajax.aspx",
+                data: {
+                    "goods": g,
+                    "crsirefo_hidden": jQuery('#js_crsirefo_hidden').val(),
+                    "remove_flg": "True"
+                },
+                cache: false,
+                ifModified: false,
+                dataType: "json",
+                success: function(contents) {
+                    setTimeout(function() {
+                        loadEnd(o, false, contents.msg, contents.btntxt);
+                    }, 400);
+                },
+                error: function(xhr, status, thrown) {
+                    loadEnd(o, true);
+                    alert(ecblib.msg.goods_ajax_bookmark.SESSION_EXPIRED);
+                    return false;
+                }
+            });
+            return true;
+        };
+        if (!jQuery(this).length) {
+            return false;
+        }
+        var href = jQuery(this).attr("href");
+        var re = new RegExp("goods=([0-9A-Za-z_\-]+)");
+        var matches = href.match(re);
+        var goods = "";
+        if (matches && matches.length == 2) {
+            goods = matches[1];
+        } else {
+            return true;
+        }
+        if (!isRegisted) {
+            addBookmark(this, goods);
+        } else {
+            removeBookmark(this, goods);
+        }
+        return false;
+    });
+});
