@@ -1,9 +1,0 @@
-﻿var ecblib = ecblib || {};
-ecblib.msg = ecblib.msg || {};
-
-(function () {
-    'use strict';
-
-    var _msg = ecblib.msg;
-
-}());
