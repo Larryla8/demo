@@ -1,0 +1,3 @@
+﻿(function(){
+    jQuery("#block_of_itemhistory").load(ecblib.sys.wwwroot + "/site/goods/ajaxitemhistory.aspx?mode=html&goods=" + jQuery("#block_of_itemhistory").data("currentgoods"));
+}());

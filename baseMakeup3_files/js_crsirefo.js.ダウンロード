@@ -1,0 +1,1 @@
+﻿var crsirefo_jscart =  jQuery("#js_crsirefo").text();
